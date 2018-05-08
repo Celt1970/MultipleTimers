@@ -29,6 +29,7 @@ class CollectionVC: UIViewController {
         colletionView?.register(CollectionViewCell.self , forCellWithReuseIdentifier: "myCollectionCell")
         colletionView?.delegate = self
         colletionView?.dataSource = self
+
         self.view.addSubview(colletionView!)
         colletionView?.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints([
@@ -37,6 +38,8 @@ class CollectionVC: UIViewController {
             NSLayoutConstraint(item: colletionView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: colletionView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0),
             ])
+        flowLayout.estimatedItemSize = CGSize(width: (self.view.bounds.width) - 40, height: 1)
+
     }
     @objc func addBtnTapped() {
         let nextVC = AddTimerVC()
@@ -63,20 +66,33 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         cell.timerModel = timer
         cell.timerModel?.delegate = cell
         cell.timerModel = timers[indexPath.row]
-        cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval((cell.timerModel?.seconds)!)), attributes: cell.labelAttributes)
-
-//        cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
-//        cells.append(cell)
+        cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
+        if cell.timerModel?.comment != nil {
+            cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+        } else {
+            cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+            
+        }
         return cell
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width - 20, height: 90)
-
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//         let cell = collectionView.cellForItem(at: indexPath)
+//            if cell != nil {
+//                print(cell)
+//            } else {
+//                print("cell doesn't exists")
+//            }
+//        
+//        
+//        return CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
+//
+//    }
 }
 
 protocol AddTimerDelegate {

@@ -20,14 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainVC = CollectionVC()
         mainVC.view.backgroundColor = .white
         let navigationController = UINavigationController(rootViewController: mainVC)
+        navigationController.navigationBar.isTranslucent = false
+        UINavigationBar.appearance().tintColor = myYellow
         UINavigationBar.appearance().barTintColor = backColor
+        UIApplication.shared.statusBarStyle = .lightContent
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            print("granted: (\(granted)")
+            print("granted: \(granted)")
         }
         
         return true

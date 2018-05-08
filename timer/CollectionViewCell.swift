@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-let backColor = UIColor(red: 66/255, green: 86/255, blue: 106/255, alpha: 1)
+let backColor = UIColor(red: 57/255, green: 70/255, blue: 86/255, alpha: 1)
 let borderColor = UIColor(red: 107/255, green: 131/255, blue: 153/255, alpha: 1)
 let myGreen = UIColor(red: 115/255, green: 177/255, blue: 95/255, alpha: 1)
 let myYellow = UIColor(red: 237/255, green: 203/255, blue: 96/255, alpha: 1)
@@ -18,6 +18,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     
     
     var timerModel: TimerModel?
+    var height: CGFloat = 0.0
     
     let timerLabel = UILabel()
     let startButton = UIButton()
@@ -44,12 +45,14 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         self.layer.masksToBounds = false
         self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
         
-        commentLabel.text = "Put your ass into the void"
+        
         commentLabel.textAlignment = NSTextAlignment.center
+        commentLabel.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 3) * 2
+        commentLabel.numberOfLines = 0
         
         timerLabel.textAlignment = NSTextAlignment.left
         
-        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
+        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
         startButton.backgroundColor = backColor
         startButton.addTarget(self, action: #selector(startButtonTapped(_:)), for: .touchUpInside)
         startButton.layer.cornerRadius = 15.0
@@ -58,7 +61,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         startButton.layer.masksToBounds = true
         
         
-        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
+        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
         pauseButton.backgroundColor = backColor
         pauseButton.addTarget(self, action: #selector(pauseButtonTapped(_:)), for: .touchUpInside)
         pauseButton.layer.cornerRadius = 15.0
@@ -81,16 +84,25 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         wholeStack.distribution = .fillEqually
         wholeStack.alignment = .fill
         wholeStack.spacing = 10
-     
-        contentView.addSubview(wholeStack)
+        
+        let stackWithComment = UIStackView(arrangedSubviews: [wholeStack, commentLabel])
+        stackWithComment.axis = .vertical
+        stackWithComment.distribution = .fillProportionally
+        stackWithComment.alignment = .fill
+        stackWithComment.spacing = 10
+        stackWithComment.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stackWithComment)
         
         contentView.addConstraints([
-            NSLayoutConstraint(item: wholeStack, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 12),
-            NSLayoutConstraint(item: wholeStack, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant:-12),
-            NSLayoutConstraint(item: wholeStack, attribute: .leading , relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: 15),
-            NSLayoutConstraint(item: wholeStack, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant:-15),
-            NSLayoutConstraint(item: wholeStack, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 65)
+            NSLayoutConstraint(item: stackWithComment, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 12),
+            NSLayoutConstraint(item: stackWithComment, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant:-12),
+            NSLayoutConstraint(item: stackWithComment, attribute: .leading , relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: 15),
+            NSLayoutConstraint(item: stackWithComment, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant:-15),
+            NSLayoutConstraint(item: wholeStack, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.height / 11),
+            NSLayoutConstraint(item: stackWithComment, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.width - 60)
             ])
+        
+        height = 24 + 66 + 10 + commentLabel.bounds.height
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -104,18 +116,23 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         if timerModel?.isTimerRunning == false {
             timerModel?.start()
             
-            startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+            startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
             startButton.backgroundColor = myGreen
             
             pauseButton.layer.borderColor = myYellow.cgColor
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
         } else {
             timerModel?.stop()
             
             timerLabel.attributedText = NSAttributedString(string: (timeString(time: TimeInterval((timerModel?.temp)!))), attributes: labelAttributes)
-            startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
+            startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
             startButton.backgroundColor = backColor
+            pauseButton.backgroundColor = backColor
+            pauseButton.layer.borderColor = borderColor.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
+
             timerModel?.isTimerRunning = false
+            
         }
     }
     
@@ -127,13 +144,12 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     @objc func pauseButtonTapped(_ sender: UIButton) {
         if timerModel?.resumeTapped == false {
             timerModel?.pause()
-            //            timerModel?.resumeTapped = true
-            pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+            pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
             pauseButton.backgroundColor = myYellow
             pauseButton.layer.borderColor = myYellow.cgColor
         } else {
             timerModel?.resume()
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
             pauseButton.backgroundColor = backColor
             pauseButton.layer.borderColor = myYellow.cgColor
         }
@@ -143,34 +159,15 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         timerLabel.attributedText = NSAttributedString(string: timeString(time: TimeInterval(seconds)), attributes: labelAttributes)
         if seconds == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: { [weak self] in
-                self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval(seconds)))!, attributes: self?.labelAttributes)
-                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
+                self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval((self?.timerModel?.seconds)!)))!, attributes: self?.labelAttributes)
+                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
                 self?.startButton.backgroundColor = backColor
+                self?.pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
+                self?.pauseButton.backgroundColor = backColor
+                self?.pauseButton.layer.borderColor = borderColor.cgColor
             })
         }
     }
-    
-    
-//    @objc func updateTimer() {
-//        //        let last = estimateTime?.timeIntervalSinceNow
-//        //        let intValue = Int(last!) + 1
-//        //        temp = intValue
-//        //
-//        //        if intValue < 1 {
-//        //            timer.invalidate()
-//        //            temp = seconds
-//        //            timerLabel.attributedText = NSAttributedString(string: timeString(time: TimeInterval(temp)), attributes: labelAttributes)
-//        //            isTimerRunning = false
-//        //            DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: { [weak self] in
-//        //                self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval((self?.temp)!)))!, attributes: self?.labelAttributes)
-//        //                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 15)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
-//        //                self?.startButton.backgroundColor = backColor
-//        //            })
-//        //            timerLabel.attributedText = NSAttributedString(string: timeString(time: 0), attributes: labelAttributes)
-//        //        } else {
-//        //            timerLabel.attributedText = NSAttributedString(string: timeString(time: TimeInterval(intValue)), attributes: labelAttributes)
-//        //        }
-//    }
     
     func timeString(time:TimeInterval) -> String {
         let hours = Int(time) / 3600

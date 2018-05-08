@@ -19,11 +19,13 @@ class TimerModel {
     var delegate: TimerDelegate?
     var notificationContent: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
-        content.title = "Title"
-        content.body = "\(seconds)"
+        content.title = "Timer"
+        content.body = comment ?? "Timer for \(seconds) seconds ended"
         content.sound = UNNotificationSound(named: "test2.wav")
         return content
     }
+    
+    var comment: String?
     
     var isTimerRunning = false
     var resumeTapped = false
@@ -37,10 +39,6 @@ class TimerModel {
         temp = seconds
         runTimer()
         
-//        let content = UNMutableNotificationContent()
-//        content.title = "Title"
-//        content.body = "\(seconds)"
-//        content.sound = UNNotificationSound(named: "test2.wav")
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(seconds), repeats: false)
         let request = UNNotificationRequest(identifier: "\(identifier)", content: notificationContent, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
