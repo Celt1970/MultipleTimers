@@ -13,9 +13,9 @@ class AddTimerVC: UIViewController {
     var timer: TimerModel?
     var delegate: AddTimerDelegate?
     let addButton = UIButton()
-    let commentField = UITextView(frame: .zero)
+    let commentField = UITextField()
     
-    var picker = UIDatePicker()
+    var picker = TimePicker()
     
     
 
@@ -24,8 +24,6 @@ class AddTimerVC: UIViewController {
         configureGestures()
         self.view.backgroundColor = backColor
 //        configUI()
-        picker.datePickerMode = .countDownTimer
-        picker.setValue(myGreen, forKey: "textColor")
         picker.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(picker)
         
@@ -39,6 +37,7 @@ class AddTimerVC: UIViewController {
         commentField.layer.borderColor = borderColor.cgColor
         commentField.layer.borderWidth = 3
         commentField.layer.cornerRadius = 15
+        commentField.addTarget(self, action: #selector(buttonPressed(_:)), for: UIControlEvents.primaryActionTriggered)
         self.view.addSubview(commentField)
         
         addButton.setAttributedTitle(NSAttributedString(string: "ADD TIMER", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 20), NSAttributedStringKey.foregroundColor : myYellow]), for: .normal )
@@ -51,7 +50,7 @@ class AddTimerVC: UIViewController {
         self.view.addSubview(addButton)
         
         self.view.addConstraints([
-            NSLayoutConstraint(item: picker, attribute: .top, relatedBy: .equal, toItem: commentField, attribute: .top, multiplier: 1, constant: 20),
+            NSLayoutConstraint(item: picker, attribute: .top, relatedBy: .equal, toItem: commentField, attribute: .top, multiplier: 1, constant: 50),
             NSLayoutConstraint(item: picker, attribute: .leading, relatedBy: .equal, toItem: self.view , attribute: .leading, multiplier: 1, constant: 20),
             NSLayoutConstraint(item: picker, attribute: .trailing, relatedBy: .equal , toItem: self.view , attribute: .trailing, multiplier: 1 , constant: -20),
             NSLayoutConstraint(item: picker, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.height / 2),
@@ -85,11 +84,11 @@ class AddTimerVC: UIViewController {
     
     @objc func buttonPressed(_ sender: UIButton) {
         
-        let intValue = getHourFromDatePicker(datePicker: picker)
+        let intValue = picker.getTime()
         timer = TimerModel(seconds: intValue)
-        if commentField.text.isEmpty != true {
-            timer?.comment = commentField.text.trimmingCharacters(in: .whitespacesAndNewlines)
-            print(commentField.text.trimmingCharacters(in: .newlines))
+        if commentField.text?.isEmpty != true {
+            timer?.comment = commentField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            print(commentField.text?.trimmingCharacters(in: .newlines))
         }
         delegate?.addTimerToList(timer: timer!)
         self.navigationController?.popViewController(animated: true)

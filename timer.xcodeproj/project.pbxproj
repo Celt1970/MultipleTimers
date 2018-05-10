@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA971A5420A2197300C85C9E /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA971A5320A2197300C85C9E /* TimerModel.swift */; };
+		AA9A999D20A45BD1004227A6 /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9A999C20A45BD1004227A6 /* TimePicker.swift */; };
 		B48D9B0B209DE1A300CB512E /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */; };
 		B48D9B0D209DE1E400CB512E /* CollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D9B0C209DE1E400CB512E /* CollectionVC.swift */; };
 		B4DFEA89209B23C40063E939 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DFEA88209B23C40063E939 /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		AA971A5320A2197300C85C9E /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
+		AA9A999C20A45BD1004227A6 /* TimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePicker.swift; sourceTree = "<group>"; };
 		B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		B48D9B0C209DE1E400CB512E /* CollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionVC.swift; sourceTree = "<group>"; };
 		B4DFEA85209B23C40063E939 /* timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 				AA971A5320A2197300C85C9E /* TimerModel.swift */,
 				B4DFEA9C209B51AC0063E939 /* AddTimerVC.swift */,
 				B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */,
+				AA9A999C20A45BD1004227A6 /* TimePicker.swift */,
 				B48D9B0C209DE1E400CB512E /* CollectionVC.swift */,
 				B4DFEA8F209B23C40063E939 /* Assets.xcassets */,
 				B4DFEAA1209C5F990063E939 /* test2.wav */,
@@ -156,6 +159,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA9A999D20A45BD1004227A6 /* TimePicker.swift in Sources */,
 				B48D9B0B209DE1A300CB512E /* CollectionViewCell.swift in Sources */,
 				AA971A5420A2197300C85C9E /* TimerModel.swift in Sources */,
 				B4DFEA9D209B51AC0063E939 /* AddTimerVC.swift in Sources */,

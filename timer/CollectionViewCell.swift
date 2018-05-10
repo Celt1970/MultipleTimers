@@ -47,7 +47,6 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         
         
         commentLabel.textAlignment = NSTextAlignment.center
-        commentLabel.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 3) * 2
         commentLabel.numberOfLines = 0
         
         timerLabel.textAlignment = NSTextAlignment.left
@@ -102,15 +101,12 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             NSLayoutConstraint(item: stackWithComment, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.width - 60)
             ])
         
-        height = 24 + 66 + 10 + commentLabel.bounds.height
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
+
     
     @objc func startButtonTapped(_ sender: UIButton) {
         if timerModel?.isTimerRunning == false {
@@ -175,6 +171,25 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         let seconds = Int(time) % 60
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
+    
+    
+    override func layoutSubviews() {
+        commentLabel.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 3) * 2
+        super.layoutSubviews()
+        height = 24 + 66 + 10 + commentLabel.bounds.size.height
+        print("Height is: \(height)")
+    }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        print("Height in updateConstraints is: \(height)")
+
+    }
+    
+    
+    
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

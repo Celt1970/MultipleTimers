@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import UserNotifications
+
 
 class CollectionVC: UIViewController {
     
     var colletionView: UICollectionView?
+    var sizingCell: CollectionViewCell = CollectionViewCell()
+    var heights = [CGFloat]()
+    
     var timers = [TimerModel]() {
         didSet{
             self.colletionView?.reloadData()
@@ -19,7 +24,7 @@ class CollectionVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let addTimerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped))
         self.navigationItem.rightBarButtonItem = addTimerButton
         
@@ -48,7 +53,8 @@ class CollectionVC: UIViewController {
     }
 }
 
-extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AddTimerDelegate {
+extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AddTimerDelegate  {
+   
     func addTimerToList(timer: TimerModel) {
         self.timers.append(timer)
     }
@@ -58,6 +64,12 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return timers.count
+    }
+    
+    func configureCell (_ cell: CollectionViewCell, at indexPath: IndexPath) {
+        cell.timerModel = timers[indexPath.row]
+        
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -71,28 +83,44 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
             cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
         } else {
             cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
-            
         }
+        let newHeight = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        
+        print("Cells height is: \(cell.height)")
+        print("Cells another height: \(cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height)")
+        heights.append(newHeight)
         return cell
     }
     
-    
-    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCollectionCell", for: indexPath) as! CollectionViewCell
+//
+//        let timer = timers[indexPath.row]
+//        cell.timerModel = timer
+//        cell.timerModel?.delegate = cell
+//        cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
+//        if cell.timerModel?.comment != nil {
+//            cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+//        } else {
+//            cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+//        }
+//
+//        cell.setNeedsUpdateConstraints()
+//        cell.updateConstraints()
+//        cell.setNeedsLayout()
+//        cell.layoutIfNeeded()
+//
+//
+//        let height = sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingExpandedSize).height
+//
+//        let cellSize = CGSize(width: 300, height: height)
+//        return cellSize
+//    }
+//
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//         let cell = collectionView.cellForItem(at: indexPath)
-//            if cell != nil {
-//                print(cell)
-//            } else {
-//                print("cell doesn't exists")
-//            }
-//        
-//        
-//        return CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
-//
-//    }
 }
 
 protocol AddTimerDelegate {
