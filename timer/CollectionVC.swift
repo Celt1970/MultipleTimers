@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import RealmSwift
 
 
 class CollectionVC: UIViewController {
@@ -15,15 +16,20 @@ class CollectionVC: UIViewController {
     var colletionView: UICollectionView?
     var sizingCell: CollectionViewCell = CollectionViewCell()
     var heights = [CGFloat]()
+    var realm = try! Realm()
     
     var timers = [TimerModel]() {
         didSet{
             self.colletionView?.reloadData()
         }
     }
+    
+    lazy var timersToo: Results<RealmTimerModel> = {self.realm.objects(RealmTimerModel.self)}()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setModel()
+        
 
         let addTimerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped))
         self.navigationItem.rightBarButtonItem = addTimerButton
@@ -45,6 +51,13 @@ class CollectionVC: UIViewController {
             ])
         flowLayout.estimatedItemSize = CGSize(width: (self.view.bounds.width) - 40, height: 1)
 
+    }
+    
+    func setModel() {
+        for timer in timersToo {
+            let timerModel = TimerModel(seconds: timer.seconds, timerModel: timer)
+            timers.append(timerModel)
+        }
     }
     @objc func addBtnTapped() {
         let nextVC = AddTimerVC()
@@ -89,6 +102,15 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         print("Cells height is: \(cell.height)")
         print("Cells another height: \(cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height)")
         heights.append(newHeight)
+        
+        if (cell.timerModel?.realmTimerModel.isTimerRunning)! {
+            cell.runTimerFromBackground()
+        }
+        if (cell.timerModel?.realmTimerModel.isResumeTapped)! {
+            cell.pauseFromBackground()
+        }
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL)
         return cell
     }
     

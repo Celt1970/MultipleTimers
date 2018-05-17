@@ -101,6 +101,8 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             NSLayoutConstraint(item: stackWithComment, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.width - 60)
             ])
         
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -137,7 +139,33 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         pauseButton.isEnabled = true
     }
     
+    func runTimerFromBackground() {
+        timerModel?.runTimerFromBackground()
+        pauseButton.isEnabled = true
+        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+        startButton.backgroundColor = myGreen
+        
+        pauseButton.layer.borderColor = myYellow.cgColor
+        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+    }
+    
+    func pauseFromBackground() {
+        timerModel?.pauseFromBackground()
+        pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+        pauseButton.backgroundColor = myYellow
+        pauseButton.layer.borderColor = myYellow.cgColor
+        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+        startButton.backgroundColor = myGreen
+    }
+    
     @objc func pauseButtonTapped(_ sender: UIButton) {
+        if timerModel?.isFromBackground == true{
+            timerModel?.resumeTappedFromBackground()
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+            pauseButton.backgroundColor = backColor
+            pauseButton.layer.borderColor = myYellow.cgColor
+            return
+        }
         if timerModel?.resumeTapped == false {
             timerModel?.pause()
             pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
@@ -154,7 +182,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     func updateTimer(seconds: Int) {
         timerLabel.attributedText = NSAttributedString(string: timeString(time: TimeInterval(seconds)), attributes: labelAttributes)
         if seconds == 0 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: { [weak self] in
                 self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval((self?.timerModel?.seconds)!)))!, attributes: self?.labelAttributes)
                 self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
                 self?.startButton.backgroundColor = backColor

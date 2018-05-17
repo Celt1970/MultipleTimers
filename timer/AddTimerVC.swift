@@ -85,11 +85,14 @@ class AddTimerVC: UIViewController {
     @objc func buttonPressed(_ sender: UIButton) {
         
         let intValue = picker.getTime()
-        timer = TimerModel(seconds: intValue)
+        let model = RealmTimerModel()
+        model.seconds = intValue
         if commentField.text?.isEmpty != true {
-            timer?.comment = commentField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            print(commentField.text?.trimmingCharacters(in: .newlines))
+//            timer?.comment = commentField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            model.comment = commentField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         }
+        timer = TimerModel(seconds: intValue, timerModel: model)
+        
         delegate?.addTimerToList(timer: timer!)
         self.navigationController?.popViewController(animated: true)
     }

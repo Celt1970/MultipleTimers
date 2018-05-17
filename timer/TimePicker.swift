@@ -144,7 +144,7 @@ class TimePicker: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
         fatalError("init(coder:) has not been implemented")
     }
     
-    struct Time: Equatable {
+    struct Time {
         var hours: Int
         var minutes: Int
         var seconds: Int
