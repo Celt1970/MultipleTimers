@@ -18,8 +18,6 @@
 		B4DFEA90209B23C40063E939 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4DFEA8F209B23C40063E939 /* Assets.xcassets */; };
 		B4DFEA93209B23C40063E939 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4DFEA91209B23C40063E939 /* LaunchScreen.storyboard */; };
 		B4DFEA9D209B51AC0063E939 /* AddTimerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DFEA9C209B51AC0063E939 /* AddTimerVC.swift */; };
-		B4DFEA9F209C5E510063E939 /* sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4DFEA9E209C5E510063E939 /* sound.wav */; };
-		B4DFEAA2209C5F990063E939 /* test2.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4DFEAA1209C5F990063E939 /* test2.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +36,6 @@
 		B4DFEA92209B23C40063E939 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B4DFEA94209B23C40063E939 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4DFEA9C209B51AC0063E939 /* AddTimerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTimerVC.swift; sourceTree = "<group>"; };
-		B4DFEA9E209C5E510063E939 /* sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound.wav; sourceTree = "<group>"; };
-		B4DFEAA1209C5F990063E939 /* test2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test2.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,9 +87,7 @@
 				AA9A999C20A45BD1004227A6 /* TimePicker.swift */,
 				B48D9B0C209DE1E400CB512E /* CollectionVC.swift */,
 				B4DFEA8F209B23C40063E939 /* Assets.xcassets */,
-				B4DFEAA1209C5F990063E939 /* test2.wav */,
 				AA2753F920AE2D1400189D76 /* timerSound1.wav */,
-				B4DFEA9E209C5E510063E939 /* sound.wav */,
 				B4DFEA91209B23C40063E939 /* LaunchScreen.storyboard */,
 				B4DFEA94209B23C40063E939 /* Info.plist */,
 			);
@@ -176,11 +170,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4DFEA9F209C5E510063E939 /* sound.wav in Resources */,
 				AA2753FA20AE2D1400189D76 /* timerSound1.wav in Resources */,
 				B4DFEA93209B23C40063E939 /* LaunchScreen.storyboard in Resources */,
 				B4DFEA90209B23C40063E939 /* Assets.xcassets in Resources */,
-				B4DFEAA2209C5F990063E939 /* test2.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
