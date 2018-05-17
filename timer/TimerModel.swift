@@ -106,7 +106,7 @@ class TimerModel {
     }
     
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
         time = TimeInterval(temp)
         estimateTime = Date(timeIntervalSinceNow: time)
         isTimerRunning = true
@@ -121,11 +121,13 @@ class TimerModel {
     
     func runTimerFromBackground() {
         timer.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
         time = TimeInterval(realmTimerModel.timeFromPause)
-        estimateTime = Date(timeIntervalSinceNow: time)
+        if realmTimerModel.isResumeTapped {
+            estimateTime = Date(timeIntervalSinceNow: time)
+
+        }
         isTimerRunning = true
-        
         
         try! realm.write {
             realmTimerModel.estimateDate = estimateTime!
@@ -156,6 +158,7 @@ class TimerModel {
         temp = intValue
         
         if intValue < 1 {
+            delegate?.updateTimer(seconds: 0)
             timer.invalidate()
             temp = seconds
             isTimerRunning = false
@@ -165,7 +168,7 @@ class TimerModel {
                 realmTimerModel.estimateDate = nil
                 self.realm.add(realmTimerModel, update: true)
             }
-            delegate?.updateTimer(seconds: 0)
+            
         } else {
             delegate?.updateTimer(seconds: intValue)
         }

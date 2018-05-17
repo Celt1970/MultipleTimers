@@ -114,8 +114,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         if timerModel?.isTimerRunning == false {
             timerModel?.start()
             
-            startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-            startButton.backgroundColor = myGreen
+            startButtonIsStopped()
             
             pauseButton.layer.borderColor = myYellow.cgColor
             pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
@@ -139,11 +138,16 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         pauseButton.isEnabled = true
     }
     
+    func startButtonIsStopped() {
+        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
+        startButton.backgroundColor = myGreen
+        
+    }
+    
     func runTimerFromBackground() {
         timerModel?.runTimerFromBackground()
         pauseButton.isEnabled = true
-        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-        startButton.backgroundColor = myGreen
+        startButtonIsStopped()
         
         pauseButton.layer.borderColor = myYellow.cgColor
         pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
@@ -154,8 +158,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
         pauseButton.backgroundColor = myYellow
         pauseButton.layer.borderColor = myYellow.cgColor
-        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-        startButton.backgroundColor = myGreen
+        startButtonIsStopped()
     }
     
     @objc func pauseButtonTapped(_ sender: UIButton) {
@@ -213,17 +216,6 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         print("Height in updateConstraints is: \(height)")
 
     }
-    
-    
-    
-    
-    
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-//        self.timerModel?.delegate = self
-    }
-    
-    
+
 }
 
