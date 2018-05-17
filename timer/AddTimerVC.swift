@@ -22,7 +22,7 @@ class AddTimerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureGestures()
-        self.view.backgroundColor = backColor
+        self.view.backgroundColor = CustomColors.backColor
 //        configUI()
         picker.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(picker)
@@ -32,19 +32,19 @@ class AddTimerVC: UIViewController {
         
         
         commentField.font = UIFont(name: "Helvetica", size: 21)
-        commentField.textColor = borderColor
-        commentField.backgroundColor = backColor
-        commentField.layer.borderColor = borderColor.cgColor
+        commentField.textColor = CustomColors.borderColor
+        commentField.backgroundColor = CustomColors.backColor
+        commentField.layer.borderColor = CustomColors.borderColor.cgColor
         commentField.layer.borderWidth = 3
         commentField.layer.cornerRadius = 15
         commentField.addTarget(self, action: #selector(buttonPressed(_:)), for: UIControlEvents.primaryActionTriggered)
         self.view.addSubview(commentField)
         
-        addButton.setAttributedTitle(NSAttributedString(string: "ADD TIMER", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 20), NSAttributedStringKey.foregroundColor : myYellow]), for: .normal )
-        addButton.layer.borderColor = myYellow.cgColor
+        addButton.setAttributedTitle(NSAttributedString(string: "ADD TIMER", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 20), NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal )
+        addButton.layer.borderColor = CustomColors.myYellow.cgColor
         addButton.layer.borderWidth = 4.0
         addButton.layer.cornerRadius = 5.0
-        addButton.backgroundColor = backColor
+        addButton.backgroundColor = CustomColors.backColor
         addButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         addButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(addButton)

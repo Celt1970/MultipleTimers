@@ -9,11 +9,6 @@
 import UIKit
 import UserNotifications
 
-let backColor = UIColor(red: 57/255, green: 70/255, blue: 86/255, alpha: 1)
-let borderColor = UIColor(red: 107/255, green: 131/255, blue: 153/255, alpha: 1)
-let myGreen = UIColor(red: 115/255, green: 177/255, blue: 95/255, alpha: 1)
-let myYellow = UIColor(red: 237/255, green: 203/255, blue: 96/255, alpha: 1)
-
 class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     
     
@@ -30,12 +25,12 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = backColor
+        contentView.backgroundColor = CustomColors.backColor
         
         
         self.contentView.layer.cornerRadius = 15.0
         self.contentView.layer.borderWidth = 3.0
-        self.contentView.layer.borderColor = borderColor.cgColor
+        self.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         self.contentView.layer.masksToBounds = true
         
         self.layer.shadowColor = UIColor.black.cgColor
@@ -51,21 +46,21 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         
         timerLabel.textAlignment = NSTextAlignment.left
         
-        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
-        startButton.backgroundColor = backColor
+        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myGreen]), for: .normal)
+        startButton.backgroundColor = CustomColors.backColor
         startButton.addTarget(self, action: #selector(startButtonTapped(_:)), for: .touchUpInside)
         startButton.layer.cornerRadius = 15.0
         startButton.layer.borderWidth = 3.0
-        startButton.layer.borderColor = myGreen.cgColor
+        startButton.layer.borderColor = CustomColors.myGreen.cgColor
         startButton.layer.masksToBounds = true
         
         
-        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
-        pauseButton.backgroundColor = backColor
+        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
+        pauseButton.backgroundColor = CustomColors.backColor
         pauseButton.addTarget(self, action: #selector(pauseButtonTapped(_:)), for: .touchUpInside)
         pauseButton.layer.cornerRadius = 15.0
         pauseButton.layer.borderWidth = 3.0
-        pauseButton.layer.borderColor = borderColor.cgColor
+        pauseButton.layer.borderColor = CustomColors.borderColor.cgColor
         pauseButton.layer.masksToBounds = true
         
         
@@ -113,34 +108,36 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     @objc func startButtonTapped(_ sender: UIButton) {
         if timerModel?.isTimerRunning == false {
             timerModel?.start()
+            pauseButton.isEnabled = true
             
             startButtonIsStarted()
             
-            pauseButton.layer.borderColor = myYellow.cgColor
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+            pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
         } else {
             timerModel?.stop()
             
             timerLabel.attributedText = NSAttributedString(string: (timeString(time: TimeInterval((timerModel?.temp)!))), attributes: labelAttributes)
             startButtonIsStopped()
-            pauseButton.backgroundColor = backColor
-            pauseButton.layer.borderColor = borderColor.cgColor
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
+            pauseButton.backgroundColor = CustomColors.backColor
+            pauseButton.layer.borderColor = CustomColors.borderColor.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
 
             timerModel?.isTimerRunning = false
+            pauseButton.isEnabled = false
             
         }
     }
     
     func startButtonIsStarted() {
-        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-        startButton.backgroundColor = myGreen
+        startButton.setAttributedTitle(NSAttributedString(string: "STOP", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.backColor]), for: .normal)
+        startButton.backgroundColor = CustomColors.myGreen
         
     }
     
     func startButtonIsStopped() {
-        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
-        startButton.backgroundColor = backColor
+        startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myGreen]), for: .normal)
+        startButton.backgroundColor = CustomColors.backColor
     }
     
     func runTimer() {
@@ -155,36 +152,36 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         pauseButton.isEnabled = true
         startButtonIsStarted()
         
-        pauseButton.layer.borderColor = myYellow.cgColor
-        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
+        pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
+        pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
     }
     
     func pauseFromBackground() {
         timerModel?.pauseFromBackground()
-        pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-        pauseButton.backgroundColor = myYellow
-        pauseButton.layer.borderColor = myYellow.cgColor
+        pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.backColor]), for: .normal)
+        pauseButton.backgroundColor = CustomColors.myYellow
+        pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
         startButtonIsStarted()
     }
     
     @objc func pauseButtonTapped(_ sender: UIButton) {
         if timerModel?.isFromBackground == true{
             timerModel?.resumeTappedFromBackground()
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
-            pauseButton.backgroundColor = backColor
-            pauseButton.layer.borderColor = myYellow.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
+            pauseButton.backgroundColor = CustomColors.backColor
+            pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
             return
         }
         if timerModel?.resumeTapped == false {
             timerModel?.pause()
-            pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : backColor]), for: .normal)
-            pauseButton.backgroundColor = myYellow
-            pauseButton.layer.borderColor = myYellow.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "GO", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.backColor]), for: .normal)
+            pauseButton.backgroundColor = CustomColors.myYellow
+            pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
         } else {
             timerModel?.resume()
-            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myYellow]), for: .normal)
-            pauseButton.backgroundColor = backColor
-            pauseButton.layer.borderColor = myYellow.cgColor
+            pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
+            pauseButton.backgroundColor = CustomColors.backColor
+            pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
         }
     }
     
@@ -193,11 +190,11 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         if seconds == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: { [weak self] in
                 self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval((self?.timerModel?.seconds)!)))!, attributes: self?.labelAttributes)
-                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : myGreen]), for: .normal)
-                self?.startButton.backgroundColor = backColor
-                self?.pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : borderColor]), for: .normal)
-                self?.pauseButton.backgroundColor = backColor
-                self?.pauseButton.layer.borderColor = borderColor.cgColor
+                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myGreen]), for: .normal)
+                self?.startButton.backgroundColor = CustomColors.backColor
+                self?.pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
+                self?.pauseButton.backgroundColor = CustomColors.backColor
+                self?.pauseButton.layer.borderColor = CustomColors.borderColor.cgColor
             })
         }
     }

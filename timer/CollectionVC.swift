@@ -36,7 +36,7 @@ class CollectionVC: UIViewController {
         
         let flowLayout = UICollectionViewFlowLayout()
         colletionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        colletionView?.backgroundColor = backColor
+        colletionView?.backgroundColor = CustomColors.backColor
         colletionView?.register(CollectionViewCell.self , forCellWithReuseIdentifier: "myCollectionCell")
         colletionView?.delegate = self
         colletionView?.dataSource = self
@@ -59,6 +59,7 @@ class CollectionVC: UIViewController {
             timers.append(timerModel)
         }
     }
+    
     @objc func addBtnTapped() {
         let nextVC = AddTimerVC()
         nextVC.delegate = self
@@ -81,8 +82,6 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     func configureCell (_ cell: CollectionViewCell, at indexPath: IndexPath) {
         cell.timerModel = timers[indexPath.row]
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -93,21 +92,19 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         cell.timerModel = timers[indexPath.row]
         cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
         if cell.timerModel?.comment != nil {
-            cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+            cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : CustomColors.borderColor])
         } else {
-            cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
+            cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : CustomColors.borderColor])
         }
-        let newHeight = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-        
-        print("Cells height is: \(cell.height)")
-        print("Cells another height: \(cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height)")
-        heights.append(newHeight)
         
         if (cell.timerModel?.realmTimerModel.isTimerRunning)! {
             cell.runTimerFromBackground()
-        }
-        if (cell.timerModel?.realmTimerModel.isResumeTapped)! {
+            cell.pauseButton.isEnabled = true
+        } else if (cell.timerModel?.realmTimerModel.isResumeTapped)! {
             cell.pauseFromBackground()
+            cell.pauseButton.isEnabled = true
+        } else {
+            cell.pauseButton.isEnabled = false
         }
         
         print(Realm.Configuration.defaultConfiguration.fileURL)
@@ -116,7 +113,6 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
     
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		23C059F343194B662F742DA5 /* Pods_timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 562115BE866013498756A11A /* Pods_timer.framework */; };
 		AA2753FA20AE2D1400189D76 /* timerSound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = AA2753F920AE2D1400189D76 /* timerSound1.wav */; };
+		AA2753FC20AE30B200189D76 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2753FB20AE30B200189D76 /* Utilities.swift */; };
 		AA971A5420A2197300C85C9E /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA971A5320A2197300C85C9E /* TimerModel.swift */; };
 		AA9A999D20A45BD1004227A6 /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9A999C20A45BD1004227A6 /* TimePicker.swift */; };
 		B48D9B0B209DE1A300CB512E /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */; };
@@ -25,6 +26,7 @@
 		562115BE866013498756A11A /* Pods_timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67E2B5914A0380185C98FB30 /* Pods-timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-timer.release.xcconfig"; path = "Pods/Target Support Files/Pods-timer/Pods-timer.release.xcconfig"; sourceTree = "<group>"; };
 		AA2753F920AE2D1400189D76 /* timerSound1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = timerSound1.wav; sourceTree = "<group>"; };
+		AA2753FB20AE30B200189D76 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		AA971A5320A2197300C85C9E /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
 		AA9A999C20A45BD1004227A6 /* TimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePicker.swift; sourceTree = "<group>"; };
 		B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				B48D9B0A209DE1A300CB512E /* CollectionViewCell.swift */,
 				AA9A999C20A45BD1004227A6 /* TimePicker.swift */,
 				B48D9B0C209DE1E400CB512E /* CollectionVC.swift */,
+				AA2753FB20AE30B200189D76 /* Utilities.swift */,
 				B4DFEA8F209B23C40063E939 /* Assets.xcassets */,
 				AA2753F920AE2D1400189D76 /* timerSound1.wav */,
 				B4DFEA91209B23C40063E939 /* LaunchScreen.storyboard */,
@@ -245,6 +248,7 @@
 				B4DFEA9D209B51AC0063E939 /* AddTimerVC.swift in Sources */,
 				B4DB12D120AC57B20052ECAA /* RealmTimerModel.swift in Sources */,
 				B48D9B0D209DE1E400CB512E /* CollectionVC.swift in Sources */,
+				AA2753FC20AE30B200189D76 /* Utilities.swift in Sources */,
 				B4DFEA89209B23C40063E939 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

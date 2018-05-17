@@ -17,7 +17,7 @@ class TimePicker: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
     var pickerTime = Time(hours: 0, minutes: 0, seconds: 0)
     var loopMargin = 40
     
-    private var foregroundColorForPicker = myYellow
+    private var foregroundColorForPicker = CustomColors.myYellow
     
     
     func getTime() -> Int {
