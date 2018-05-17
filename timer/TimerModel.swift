@@ -26,7 +26,7 @@ class TimerModel {
         let content = UNMutableNotificationContent()
         content.title = "Timer"
         content.body = comment ?? "Timer for \(seconds) seconds ended"
-        content.sound = UNNotificationSound(named: "test2.wav")
+        content.sound = UNNotificationSound(named: "timerSound1.wav")
         return content
     }
     
