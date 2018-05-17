@@ -114,31 +114,7 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCollectionCell", for: indexPath) as! CollectionViewCell
-//
-//        let timer = timers[indexPath.row]
-//        cell.timerModel = timer
-//        cell.timerModel?.delegate = cell
-//        cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
-//        if cell.timerModel?.comment != nil {
-//            cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
-//        } else {
-//            cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : borderColor])
-//        }
-//
-//        cell.setNeedsUpdateConstraints()
-//        cell.updateConstraints()
-//        cell.setNeedsLayout()
-//        cell.layoutIfNeeded()
-//
-//
-//        let height = sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingExpandedSize).height
-//
-//        let cellSize = CGSize(width: 300, height: height)
-//        return cellSize
-//    }
-//
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
