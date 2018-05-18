@@ -23,6 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         navigationController.navigationBar.isTranslucent = false
         UINavigationBar.appearance().tintColor = CustomColors.myYellow
         UINavigationBar.appearance().barTintColor = CustomColors.backColor
+        navigationController.navigationBar.addBorder(toSide: .Bottom, withColor: CustomColors.backColor.cgColor, andThickness: 3.0)
+        navigationController.navigationBar.layer.masksToBounds = false
+        navigationController.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        navigationController.navigationBar.layer.shadowOpacity = 0.5
+        navigationController.navigationBar.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+        navigationController.navigationBar.layer.shadowRadius = 5
         UIApplication.shared.statusBarStyle = .lightContent
         
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -62,5 +68,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
 
+}
+
+extension UIView {
+    
+    // Example use: myView.addBorder(toSide: .Left, withColor: UIColor.redColor().CGColor, andThickness: 1.0)
+    
+    enum ViewSide {
+        case Left, Right, Top, Bottom
+    }
+    
+    func addBorder(toSide side: ViewSide, withColor color: CGColor, andThickness thickness: CGFloat) {
+        
+        let border = CALayer()
+        border.backgroundColor = color
+        
+        switch side {
+        case .Left: border.frame = CGRect(x: frame.minX, y: frame.minY, width: thickness, height: frame.height); break
+        case .Right: border.frame = CGRect(x: frame.maxX, y: frame.minY, width: thickness, height: frame.height); break
+        case .Top: border.frame = CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: thickness); break
+        case .Bottom: border.frame = CGRect(x: frame.minX, y: frame.maxY, width: frame.width, height: thickness); break
+        }
+        
+        layer.addSublayer(border)
+    }
 }
 
