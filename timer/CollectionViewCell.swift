@@ -32,15 +32,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         self.contentView.layer.borderWidth = 3.0
         self.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         self.contentView.layer.masksToBounds = true
-        
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 4.0)
-        self.layer.shadowRadius = 5.0
-        self.layer.shadowOpacity = 0.8
-        self.layer.masksToBounds = false
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
-        
-        
+
         commentLabel.textAlignment = NSTextAlignment.center
         commentLabel.numberOfLines = 0
         
@@ -206,12 +198,21 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
     
+
     
     override func layoutSubviews() {
         commentLabel.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 3) * 2
         super.layoutSubviews()
         height = 24 + 66 + 10 + commentLabel.bounds.size.height
         print("Height is: \(height)")
+        
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 4.0)
+        self.layer.shadowRadius = 5.0
+        self.layer.shadowOpacity = 0.5
+        self.layer.masksToBounds = false
+        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
+
     }
     
     override func updateConstraints() {

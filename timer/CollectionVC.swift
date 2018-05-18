@@ -108,6 +108,8 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         }
         
         print(Realm.Configuration.defaultConfiguration.fileURL)
+        
+      
         return cell
     }
     
