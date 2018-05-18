@@ -33,6 +33,8 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         self.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         self.contentView.layer.masksToBounds = true
 
+        
+        
         commentLabel.textAlignment = NSTextAlignment.center
         commentLabel.numberOfLines = 0
         
@@ -45,6 +47,8 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         startButton.layer.borderWidth = 3.0
         startButton.layer.borderColor = CustomColors.myGreen.cgColor
         startButton.layer.masksToBounds = true
+        
+        
         
         
         pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
@@ -106,6 +110,14 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             
             pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
             pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
+            
+            pauseButton.layer.shadowColor = UIColor.black.cgColor
+            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 4.0)
+            pauseButton.layer.shadowRadius = 5.0
+            pauseButton.layer.shadowOpacity = 0.3
+            pauseButton.layer.masksToBounds = false
+            pauseButton.layer.shadowPath = UIBezierPath(roundedRect: pauseButton.bounds, cornerRadius: pauseButton.layer.cornerRadius).cgPath
+            
         } else {
             timerModel?.stop()
             
@@ -118,6 +130,12 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             timerModel?.isTimerRunning = false
             pauseButton.isEnabled = false
             
+            pauseButton.layer.shadowColor = nil
+            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+            pauseButton.layer.shadowRadius = 0
+            pauseButton.layer.shadowOpacity = 0
+            pauseButton.layer.masksToBounds = false
+            pauseButton.layer.shadowPath = nil
         }
     }
     
@@ -213,6 +231,13 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         self.layer.masksToBounds = false
         self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
 
+        
+        startButton.layer.shadowColor = UIColor.black.cgColor
+        startButton.layer.shadowOffset = CGSize(width: 0, height: 4.0)
+        startButton.layer.shadowRadius = 5.0
+        startButton.layer.shadowOpacity = 0.3
+        startButton.layer.masksToBounds = false
+        startButton.layer.shadowPath = UIBezierPath(roundedRect: startButton.bounds, cornerRadius: startButton.layer.cornerRadius).cgPath
     }
     
     override func updateConstraints() {
