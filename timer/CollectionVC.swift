@@ -49,7 +49,7 @@ class CollectionVC: UIViewController {
             NSLayoutConstraint(item: colletionView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: colletionView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0),
             ])
-        flowLayout.estimatedItemSize = CGSize(width: (self.view.bounds.width) - 40, height: 1)
+        flowLayout.estimatedItemSize = CGSize(width: 1, height: 1)
 
     }
     
@@ -93,6 +93,7 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         cell.timerLabel.attributedText = NSAttributedString(string: cell.timeString(time: TimeInterval(timers[indexPath.row].seconds)), attributes: cell.labelAttributes)
         if cell.timerModel?.comment != nil {
             cell.commentLabel.attributedText = NSAttributedString(string: "\(cell.timerModel!.comment!)", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : CustomColors.borderColor])
+            
         } else {
             cell.commentLabel.attributedText = NSAttributedString(string: "", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 20), NSAttributedStringKey.foregroundColor : CustomColors.borderColor])
         }
@@ -107,7 +108,7 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
             cell.pauseButton.isEnabled = false
         }
         
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+//        print(Realm.Configuration.defaultConfiguration.fileURL)
         
       
         return cell

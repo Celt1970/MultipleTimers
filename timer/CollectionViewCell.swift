@@ -19,22 +19,28 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     let startButton = UIButton()
     let pauseButton = UIButton()
     let resetButton = UIButton()
-    let labelAttributes: [NSAttributedStringKey : Any] = [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 30)!, NSAttributedStringKey.foregroundColor : UIColor.white]
+    let labelAttributes: [NSAttributedStringKey : Any] = [NSAttributedStringKey.font : UIFont(name: "Helvetica", size: 27)!, NSAttributedStringKey.foregroundColor : UIColor.white]
     let commentLabel = UILabel()
+    let fixedHeight: CGFloat = 80
+    let fisedWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+    let buttonHeight: CGFloat = 60
+    let buttonWidth: CGFloat = 70
+    let viewForButtonsAndTimer = UIView()
+    let wholeContentView = UIView()
+    let stackViewFoButtons = UIStackView()
+    let wholeView = UIStackView()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.backgroundColor = CustomColors.backColor
         
-        
         self.contentView.layer.cornerRadius = 15.0
         self.contentView.layer.borderWidth = 3.0
         self.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         self.contentView.layer.masksToBounds = true
 
-        
-        
         commentLabel.textAlignment = NSTextAlignment.center
         commentLabel.numberOfLines = 0
         
@@ -47,10 +53,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         startButton.layer.borderWidth = 3.0
         startButton.layer.borderColor = CustomColors.myGreen.cgColor
         startButton.layer.masksToBounds = true
-        
-        
-        
-        
+    
         pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
         pauseButton.backgroundColor = CustomColors.backColor
         pauseButton.addTarget(self, action: #selector(pauseButtonTapped(_:)), for: .touchUpInside)
@@ -59,47 +62,85 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         pauseButton.layer.borderColor = CustomColors.borderColor.cgColor
         pauseButton.layer.masksToBounds = true
         
+        commentLabel.preferredMaxLayoutWidth = 300
+
+        stackViewFoButtons.translatesAutoresizingMaskIntoConstraints = false
+        viewForButtonsAndTimer.translatesAutoresizingMaskIntoConstraints = false
+        wholeContentView.translatesAutoresizingMaskIntoConstraints = false
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
+        commentLabel.translatesAutoresizingMaskIntoConstraints = false
+        pauseButton.translatesAutoresizingMaskIntoConstraints = false
+        startButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        let stackViewFoButtons = UIStackView(arrangedSubviews: [ startButton, pauseButton])
+        stackViewFoButtons.addArrangedSubview(startButton)
+        stackViewFoButtons.addArrangedSubview(pauseButton)
         stackViewFoButtons.axis = .horizontal
         stackViewFoButtons.distribution = .fillEqually
         stackViewFoButtons.alignment = .fill
         stackViewFoButtons.spacing = 10
         
-        let wholeStack = UIStackView(arrangedSubviews: [timerLabel, stackViewFoButtons])
-        wholeStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        wholeStack.axis = .horizontal
-        wholeStack.distribution = .fillEqually
-        wholeStack.alignment = .fill
-        wholeStack.spacing = 10
-        
-        let stackWithComment = UIStackView(arrangedSubviews: [wholeStack, commentLabel])
-        stackWithComment.axis = .vertical
-        stackWithComment.distribution = .fillProportionally
-        stackWithComment.alignment = .fill
-        stackWithComment.spacing = 10
-        stackWithComment.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(stackWithComment)
-        
-        contentView.addConstraints([
-            NSLayoutConstraint(item: stackWithComment, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 12),
-            NSLayoutConstraint(item: stackWithComment, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant:-12),
-            NSLayoutConstraint(item: stackWithComment, attribute: .leading , relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: 15),
-            NSLayoutConstraint(item: stackWithComment, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant:-15),
-            NSLayoutConstraint(item: wholeStack, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.height / 11),
-            NSLayoutConstraint(item: stackWithComment, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.width - 60)
+        stackViewFoButtons.addConstraints([
+            NSLayoutConstraint(item: startButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: buttonHeight),
+            NSLayoutConstraint(item: startButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: buttonWidth),
+            NSLayoutConstraint(item: pauseButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: buttonHeight),
+            NSLayoutConstraint(item: pauseButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: buttonWidth)
             ])
         
+        viewForButtonsAndTimer.addSubview(stackViewFoButtons)
+        viewForButtonsAndTimer.addSubview(timerLabel)
         
+        viewForButtonsAndTimer.addConstraints([
+            NSLayoutConstraint(item: viewForButtonsAndTimer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: fixedHeight),
+            NSLayoutConstraint(item: timerLabel, attribute: .leading, relatedBy: .equal, toItem: viewForButtonsAndTimer, attribute: .leading, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: timerLabel, attribute: .centerY, relatedBy: .equal, toItem: viewForButtonsAndTimer, attribute: .centerY, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: timerLabel, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: stackViewFoButtons, attribute: .leading, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: stackViewFoButtons, attribute: .trailing, relatedBy: .equal, toItem: viewForButtonsAndTimer, attribute: .trailing, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: stackViewFoButtons, attribute: .centerY, relatedBy: .equal, toItem: viewForButtonsAndTimer, attribute: .centerY, multiplier: 1, constant: 0),
+            ])
+
+        wholeView.addArrangedSubview(viewForButtonsAndTimer)
+        wholeView.addArrangedSubview(commentLabel)
+        wholeView.axis = .vertical
+        wholeView.distribution = .fillProportionally
+        wholeView.alignment = .fill
+        wholeView.spacing = 10
+        wholeView.translatesAutoresizingMaskIntoConstraints = false
         
+       contentView.addSubview(wholeView)
+
+        contentView.addConstraints([
+            NSLayoutConstraint(item: wholeView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: UIScreen.main.bounds.width - 40),
+
+            NSLayoutConstraint(item: wholeView, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: wholeView, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: wholeView, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant: -10),
+            NSLayoutConstraint(item: wholeView, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: -10 - (fixedHeight - buttonHeight))
+            ])
     }
     
+   
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func pauseButtonHasShadow(_ isTrue: Bool) {
+        if isTrue {
+            pauseButton.layer.shadowColor = UIColor.black.cgColor
+            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 4.0)
+            pauseButton.layer.shadowRadius = 5.0
+            pauseButton.layer.shadowOpacity = 0.3
+            pauseButton.layer.masksToBounds = false
+            pauseButton.layer.shadowPath = UIBezierPath(roundedRect: pauseButton.bounds, cornerRadius: pauseButton.layer.cornerRadius).cgPath
+        } else {
+            pauseButton.layer.shadowColor = nil
+            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+            pauseButton.layer.shadowRadius = 0
+            pauseButton.layer.shadowOpacity = 0
+            pauseButton.layer.masksToBounds = false
+            pauseButton.layer.shadowPath = nil
+        }
+    }
     
     @objc func startButtonTapped(_ sender: UIButton) {
         if timerModel?.isTimerRunning == false {
@@ -111,12 +152,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             pauseButton.layer.borderColor = CustomColors.myYellow.cgColor
             pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myYellow]), for: .normal)
             
-            pauseButton.layer.shadowColor = UIColor.black.cgColor
-            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 4.0)
-            pauseButton.layer.shadowRadius = 5.0
-            pauseButton.layer.shadowOpacity = 0.3
-            pauseButton.layer.masksToBounds = false
-            pauseButton.layer.shadowPath = UIBezierPath(roundedRect: pauseButton.bounds, cornerRadius: pauseButton.layer.cornerRadius).cgPath
+            pauseButtonHasShadow(true)
             
         } else {
             timerModel?.stop()
@@ -130,12 +166,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
             timerModel?.isTimerRunning = false
             pauseButton.isEnabled = false
             
-            pauseButton.layer.shadowColor = nil
-            pauseButton.layer.shadowOffset = CGSize(width: 0, height: 0)
-            pauseButton.layer.shadowRadius = 0
-            pauseButton.layer.shadowOpacity = 0
-            pauseButton.layer.masksToBounds = false
-            pauseButton.layer.shadowPath = nil
+            pauseButtonHasShadow(false)
         }
     }
     
@@ -148,6 +179,7 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
     func startButtonIsStopped() {
         startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myGreen]), for: .normal)
         startButton.backgroundColor = CustomColors.backColor
+        
     }
     
     func runTimer() {
@@ -200,11 +232,11 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         if seconds == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: { [weak self] in
                 self?.timerLabel.attributedText = NSAttributedString(string: (self?.timeString(time: TimeInterval((self?.timerModel?.seconds)!)))!, attributes: self?.labelAttributes)
-                self?.startButton.setAttributedTitle(NSAttributedString(string: "START", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.myGreen]), for: .normal)
-                self?.startButton.backgroundColor = CustomColors.backColor
+                self?.startButtonIsStopped()
                 self?.pauseButton.setAttributedTitle(NSAttributedString(string: "PAUSE", attributes: [NSAttributedStringKey.font : UIFont(name: "Helvetica Bold", size: 14)!, NSAttributedStringKey.foregroundColor : CustomColors.borderColor]), for: .normal)
                 self?.pauseButton.backgroundColor = CustomColors.backColor
                 self?.pauseButton.layer.borderColor = CustomColors.borderColor.cgColor
+                self?.pauseButtonHasShadow(false)
             })
         }
     }
@@ -222,7 +254,6 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         commentLabel.preferredMaxLayoutWidth = (UIScreen.main.bounds.width / 3) * 2
         super.layoutSubviews()
         height = 24 + 66 + 10 + commentLabel.bounds.size.height
-        print("Height is: \(height)")
         
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4.0)
@@ -230,7 +261,6 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         self.layer.shadowOpacity = 0.5
         self.layer.masksToBounds = false
         self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
-
         
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 0, height: 4.0)
@@ -239,12 +269,5 @@ class CollectionViewCell: UICollectionViewCell, TimerDelegate {
         startButton.layer.masksToBounds = false
         startButton.layer.shadowPath = UIBezierPath(roundedRect: startButton.bounds, cornerRadius: startButton.layer.cornerRadius).cgPath
     }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-        print("Height in updateConstraints is: \(height)")
-
-    }
-
 }
 
