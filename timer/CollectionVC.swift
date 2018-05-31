@@ -18,26 +18,28 @@ class CollectionVC: UIViewController {
     var heights = [CGFloat]()
     var realm = try! Realm()
     
-    var timers = [TimerModel]() 
-//        didSet{
-//            self.colletionView?.reloadData()
-//        }
-//    }
+    var timers = [TimerModel]()
+    var timersToRemove = [IndexPath]()
+    
+    var addTimerButton = UIBarButtonItem()
+    var editingButton = UIBarButtonItem()
+    var deleteButton = UIBarButtonItem()
+    var cancelButton = UIBarButtonItem()
     
     lazy var timersToo: Results<RealmTimerModel> = {self.realm.objects(RealmTimerModel.self)}()
     
     var isEditingPressed = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setModel()
+        addTimerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped))
+        editingButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editingButtonPressed))
+        deleteButton = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteSelectedItems))
+        cancelButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(cancelButtonPressed))
         
-
-        let addTimerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped))
         self.navigationItem.rightBarButtonItem = addTimerButton
-        
-        let deleteTimerButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editingButtonPressed))
-        self.navigationItem.leftBarButtonItem = deleteTimerButton
+        self.navigationItem.leftBarButtonItem = editingButton
         
         let flowLayout = UICollectionViewFlowLayout()
         colletionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -45,7 +47,9 @@ class CollectionVC: UIViewController {
         colletionView?.register(CollectionViewCell.self , forCellWithReuseIdentifier: "myCollectionCell")
         colletionView?.delegate = self
         colletionView?.dataSource = self
-
+        colletionView?.allowsSelection = false
+        colletionView?.allowsMultipleSelection = false
+        
         self.view.addSubview(colletionView!)
         colletionView?.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints([
@@ -55,7 +59,7 @@ class CollectionVC: UIViewController {
             NSLayoutConstraint(item: colletionView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0),
             ])
         flowLayout.estimatedItemSize = CGSize(width: 1, height: 1)
-
+        
     }
     
     func setModel() {
@@ -72,38 +76,52 @@ class CollectionVC: UIViewController {
     }
     
     @objc func editingButtonPressed() {
-        if isEditingPressed {
-            self.colletionView?.allowsMultipleSelection = false
-            self.colletionView?.allowsSelection = false
-            isEditingPressed = false
-            
-            for item  in (colletionView?.visibleCells)!  {
-                if item is CollectionViewCell {
-                    item.contentView.layer.borderColor = CustomColors.borderColor.cgColor
-                    let newitem = item as! CollectionViewCell
-                    newitem.stopShaking()
-                }
+        
+        self.navigationItem.leftBarButtonItem = cancelButton
+        self.navigationItem.rightBarButtonItem = deleteButton
+        self.colletionView?.allowsSelection = true
+        self.colletionView?.allowsMultipleSelection = true
+        isEditingPressed = true
+        
+        for item in (colletionView?.visibleCells)! {
+            if item is CollectionViewCell {
+                let newItem = item as! CollectionViewCell
+                newItem.shakeCell()
             }
-            timers.forEach({$0.isShaking = false; $0.isSelected = false})
-        } else {
-            self.colletionView?.allowsSelection = true
-            self.colletionView?.allowsMultipleSelection = true
-            isEditingPressed = true
-            
-           
-            for item in (colletionView?.visibleCells)! {
-                if item is CollectionViewCell {
-                    let newItem = item as! CollectionViewCell
-                    newItem.shakeCell()
-                }
-            }
-            timers.forEach({$0.isShaking = true})
         }
+        timers.forEach({$0.isShaking = true})
+    }
+    
+    @objc func deleteSelectedItems() {
+        for index in timersToRemove.sorted(by:>) {
+            timers[index.row].deleteTimer()
+            timers.remove(at: index.row)
+        }
+        colletionView?.deleteItems(at: timersToRemove)
+        timersToRemove = [IndexPath]()
+        cancelButtonPressed()
+    }
+    
+    @objc func cancelButtonPressed() {
+        self.navigationItem.leftBarButtonItem = editingButton
+        self.navigationItem.rightBarButtonItem = addTimerButton
+        self.colletionView?.allowsMultipleSelection = false
+        self.colletionView?.allowsSelection = false
+        isEditingPressed = false
+        
+        for item  in (colletionView?.visibleCells)!  {
+            if item is CollectionViewCell {
+                item.contentView.layer.borderColor = CustomColors.borderColor.cgColor
+                let newitem = item as! CollectionViewCell
+                newitem.stopShaking()
+            }
+        }
+        timers.forEach({$0.isShaking = false; $0.isSelected = false})
     }
 }
 
 extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AddTimerDelegate  {
-   
+    
     func addTimerToList(timer: TimerModel) {
         self.timers.append(timer)
         self.colletionView?.insertItems(at: [IndexPath(row: timers.count - 1, section: 0)])
@@ -124,13 +142,22 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
         cell.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         timers[indexPath.row].isSelected = false
+        for (index, timer) in timersToRemove.enumerated() {
+            if timer == indexPath {
+                timersToRemove.remove(at: index)
+                break
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
         cell.contentView.layer.borderColor = CustomColors.myYellow.cgColor
         timers[indexPath.row].isSelected = true
+        timersToRemove.append(indexPath)
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCollectionCell", for: indexPath) as! CollectionViewCell
@@ -167,16 +194,18 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
             cell.contentView.layer.borderColor = CustomColors.myYellow.cgColor
         }
         
-//        print(Realm.Configuration.defaultConfiguration.fileURL)
+        //        print(Realm.Configuration.defaultConfiguration.fileURL)
         
-      
+        
         return cell
     }
     
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     }
+    
+    
 }
 
 protocol AddTimerDelegate {

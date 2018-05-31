@@ -54,6 +54,12 @@ class TimerModel {
         
     }
     
+    func deleteTimer() {
+        try! self.realm.write {
+            self.realm.delete(realmTimerModel)
+        }
+    }
+    
     func start() {
         temp = seconds
         runTimer()
