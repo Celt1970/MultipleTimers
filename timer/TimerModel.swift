@@ -22,6 +22,8 @@ class TimerModel {
     var identifier = UUID().uuidString
     var delegate: TimerDelegate?
     
+    
+    
     var notificationContent: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Timer"
@@ -35,6 +37,8 @@ class TimerModel {
     var isTimerRunning = false
     var resumeTapped = false
     var isFromBackground = false
+    var isShaking = false
+    var isSelected = false
     
     init(seconds: Int, timerModel: RealmTimerModel) {
         self.realmTimerModel = timerModel

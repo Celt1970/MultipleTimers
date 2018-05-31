@@ -18,13 +18,15 @@ class CollectionVC: UIViewController {
     var heights = [CGFloat]()
     var realm = try! Realm()
     
-    var timers = [TimerModel]() {
-        didSet{
-            self.colletionView?.reloadData()
-        }
-    }
+    var timers = [TimerModel]() 
+//        didSet{
+//            self.colletionView?.reloadData()
+//        }
+//    }
     
     lazy var timersToo: Results<RealmTimerModel> = {self.realm.objects(RealmTimerModel.self)}()
+    
+    var isEditingPressed = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +35,9 @@ class CollectionVC: UIViewController {
 
         let addTimerButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped))
         self.navigationItem.rightBarButtonItem = addTimerButton
+        
+        let deleteTimerButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editingButtonPressed))
+        self.navigationItem.leftBarButtonItem = deleteTimerButton
         
         let flowLayout = UICollectionViewFlowLayout()
         colletionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -65,12 +70,43 @@ class CollectionVC: UIViewController {
         nextVC.delegate = self
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
+    
+    @objc func editingButtonPressed() {
+        if isEditingPressed {
+            self.colletionView?.allowsMultipleSelection = false
+            self.colletionView?.allowsSelection = false
+            isEditingPressed = false
+            
+            for item  in (colletionView?.visibleCells)!  {
+                if item is CollectionViewCell {
+                    item.contentView.layer.borderColor = CustomColors.borderColor.cgColor
+                    let newitem = item as! CollectionViewCell
+                    newitem.stopShaking()
+                }
+            }
+            timers.forEach({$0.isShaking = false; $0.isSelected = false})
+        } else {
+            self.colletionView?.allowsSelection = true
+            self.colletionView?.allowsMultipleSelection = true
+            isEditingPressed = true
+            
+           
+            for item in (colletionView?.visibleCells)! {
+                if item is CollectionViewCell {
+                    let newItem = item as! CollectionViewCell
+                    newItem.shakeCell()
+                }
+            }
+            timers.forEach({$0.isShaking = true})
+        }
+    }
 }
 
 extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, AddTimerDelegate  {
    
     func addTimerToList(timer: TimerModel) {
         self.timers.append(timer)
+        self.colletionView?.insertItems(at: [IndexPath(row: timers.count - 1, section: 0)])
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -82,6 +118,17 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     func configureCell (_ cell: CollectionViewCell, at indexPath: IndexPath) {
         cell.timerModel = timers[indexPath.row]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
+        cell.contentView.layer.borderColor = CustomColors.borderColor.cgColor
+
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
+        cell.contentView.layer.borderColor = CustomColors.myYellow.cgColor
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -106,6 +153,15 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
             cell.pauseButton.isEnabled = true
         } else {
             cell.pauseButton.isEnabled = false
+        }
+        
+        if (cell.timerModel?.isShaking)! {
+            cell.shakeCell()
+        } else {
+            cell.stopShaking()
+        }
+        if cell.isSelected == false {
+            cell.contentView.layer.borderColor = CustomColors.borderColor.cgColor
         }
         
 //        print(Realm.Configuration.defaultConfiguration.fileURL)
