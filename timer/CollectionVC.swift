@@ -123,12 +123,13 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
         cell.contentView.layer.borderColor = CustomColors.borderColor.cgColor
-
+        timers[indexPath.row].isSelected = false
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = self.colletionView?.cellForItem(at: indexPath) as! CollectionViewCell
         cell.contentView.layer.borderColor = CustomColors.myYellow.cgColor
+        timers[indexPath.row].isSelected = true
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -162,6 +163,8 @@ extension CollectionVC: UICollectionViewDataSource, UICollectionViewDelegate, UI
         }
         if cell.isSelected == false {
             cell.contentView.layer.borderColor = CustomColors.borderColor.cgColor
+        } else {
+            cell.contentView.layer.borderColor = CustomColors.myYellow.cgColor
         }
         
 //        print(Realm.Configuration.defaultConfiguration.fileURL)
